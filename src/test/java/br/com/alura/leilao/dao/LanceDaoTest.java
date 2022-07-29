@@ -42,78 +42,47 @@ class LanceDaoTest {
 	@Nested
 	@DisplayName("Regras de negócio de Lance")
 	class PropoeLance{
-//		@Test
-//		void NaoDeveriaAceitarLanceComValorInvalido() {
-//			Usuario usuario = geraNovoUsuario();
-//			Usuario usuario2 = geraNovoUsuario();
-//			
-//			Leilao leilao = geraLeilao(usuario, "50");		
-//			
-//			Lance lance = geraLance(usuario2, leilao, "51");
-//			leilao.propoe(lance);
-//			
-//			Lance lance2 = geraLance(usuario, leilao, "-51");			
-//
-//			Assert.assertEquals(false, leilao.propoe(lance2));
-//		}
 		
 		@Test
 		void NaoDeveriaAceitarLanceComDataMenorQueADeAbertura() {
-			Usuario usuario = geraNovoUsuario();
-			Usuario usuario2 = geraNovoUsuario();
+			Usuario usuario = geraNovoUsuario("joao");
+			Usuario usuario2 = geraNovoUsuario("Claudio");
 			
 			Leilao leilao = geraLeilao(usuario, "50", LocalDate.now().plusDays(1));
 			
-			System.out.println( LocalDate.now().plusDays(1));
-			
 			Lance lance = geraLance(usuario, leilao, "51");
 			leilao.propoe(lance);
-			Lance lance2 = geraLance(usuario2, leilao, "56");
+			
+			Lance lance2 = geraLance(usuario2, leilao, "53");
 			
 			Assert.assertEquals(false, leilao.propoe(lance2));
 		}
 		
 		@Test
-		void NaoDeveriaAceitarLanceComValorMenorDeUmCentavo() {
-			Usuario usuario = geraNovoUsuario();
-			Usuario usuario2 = geraNovoUsuario();
-			
-			Leilao leilao = geraLeilao(usuario, "0.1");		
-			
-			Lance lance = geraLance(usuario2, leilao, "0.01");
-			leilao.propoe(lance);
-			
-			Lance lance2 = geraLance(usuario, leilao, "0.02");
-			leilao.propoe(lance2);
-
-			Assert.assertEquals(false, leilao.propoe(lance));
-		}
-		
-		@Test
 		void NaoDeveriaAceitarDoisLancesSeguidosDeUmMesmoUsuario() {
-			Usuario usuario = geraNovoUsuario();
+			Usuario usuario = geraNovoUsuario("Joao");
 			
 			Leilao leilao = geraLeilao(usuario, "500");		
 			
-			Lance lance = geraLance(usuario, leilao, "400");
+			Lance lance = geraLance(usuario, leilao, "501");
 			leilao.propoe(lance);
 			
-			Lance lance2 = geraLance(usuario, leilao, "500");			
+			Lance lance2 = geraLance(usuario, leilao, "502");			
 			
 			Assert.assertEquals(false, leilao.propoe(lance2));
 		}
 		
 		@Test
 		void NaoDeveriaAceitarNovoLanceSeTotalDeLancesDadosPeloUsuarioForCinco() {
-			Usuario usuario = geraNovoUsuario();					
-			Usuario usuario2 = geraNovoUsuario();
+			Usuario usuario = geraNovoUsuario("Joao");					
+			Usuario usuario2 = geraNovoUsuario("Claudio");
 			
 			Leilao leilao = geraLeilao(usuario, "500");		
 			
 			Lance lance1 = geraLance(usuario, leilao, "400");
 			leilao.propoe(lance1);
 									
-			Lance lance2 = geraLance(usuario2, leilao, "500");
+			Lance lance2 = geraLance(usuario2, leilao, "501");
 			leilao.propoe(lance2);
 			
 			Lance lance3 = geraLance(usuario, leilao, "600");
@@ -125,41 +94,47 @@ class LanceDaoTest {
 			Lance lance5 = geraLance(usuario, leilao, "800");
 			leilao.propoe(lance5);
 			
-			Lance lance6 = geraLance(usuario2, leilao, "500");
+			Lance lance6 = geraLance(usuario2, leilao, "900");
 			leilao.propoe(lance6);
 			
-			Lance lance7 = geraLance(usuario, leilao, "600");
+			Lance lance7 = geraLance(usuario, leilao, "1000");
 			leilao.propoe(lance7);
 			
-			Lance lance8 = geraLance(usuario2, leilao, "700");
+			Lance lance8 = geraLance(usuario2, leilao, "1001");
 			leilao.propoe(lance8);
 			
-			Lance lance9 = geraLance(usuario, leilao, "800");
+			Lance lance9 = geraLance(usuario, leilao, "1002");
 			leilao.propoe(lance9);
 			
-			Lance lance10 = geraLance(usuario2, leilao, "900");
+			Lance lance10 = geraLance(usuario2, leilao, "1003");
 			leilao.propoe(lance10);
 			
-			Lance lance11 = geraLance(usuario2, leilao, "900");
+			Lance lance11 = geraLance(usuario, leilao, "1004");
+			leilao.propoe(lance11);
 			
+			Lance lance12 = geraLance(usuario2, leilao, "1005");			
+			leilao.propoe(lance12);
 			
-			Assert.assertEquals(false, leilao.propoe(lance11));
+			Lance lance13 = geraLance(usuario, leilao, "1006");
+			
+			Assert.assertEquals(false, leilao.propoe(lance13));
 		}
 		
 		@Test
 		void NaoDeveriaAceitarLanceComValorMenorQueOUltimo() {
-			Usuario usuario = geraNovoUsuario();					
-			Usuario usuario2 = geraNovoUsuario();
+			Usuario usuario = geraNovoUsuario("Joao");					
+			Usuario usuario2 = geraNovoUsuario("Claudio");
+			System.out.println(usuario.equals(usuario2)+" ###################################################################################");
 			
 			Leilao leilao = geraLeilao(usuario, "500");		
 			
-			Lance lance = geraLance(usuario, leilao, "400");
+			Lance lance = geraLance(usuario2, leilao, "400");
 			leilao.propoe(lance);
 			
-			Lance lance2 = geraLance(usuario2, leilao, "500");
+			Lance lance2 = geraLance(usuario, leilao, "600");
 			leilao.propoe(lance2);
 			
-			Lance lance3 = geraLance(usuario2, leilao, "490");
+			Lance lance3 = geraLance(usuario2, leilao, "590");
 			leilao.propoe(lance3);
 			
 			
@@ -168,15 +143,15 @@ class LanceDaoTest {
 		
 		@Test
 		void NaoDeveriaAceitarLanceMenorQueOValorInicialDoLeilao() {
-			Usuario usuario = geraNovoUsuario();					
-			Usuario usuario2 = geraNovoUsuario();
+			Usuario usuario = geraNovoUsuario("Joao");					
+			Usuario usuario2 = geraNovoUsuario("Claudio");
 			
-			Leilao leilao = geraLeilao(usuario, "500");		
+			Leilao leilao = geraLeilao(usuario2, "500");		
 			
 			Lance lance = geraLance(usuario, leilao, "400");
 			leilao.propoe(lance);
 			
-			Lance lance2 = geraLance(usuario2, leilao, "400");
+			Lance lance2 = geraLance(usuario2, leilao, "401");
 			
 			Assert.assertEquals(false, leilao.propoe(lance2));			
 		}
@@ -188,7 +163,7 @@ class LanceDaoTest {
 	
 		@Test
 		void testDeveriaRetornarMaiorLanceDoLeilao() {
-			Usuario usuario = geraNovoUsuario();					
+			Usuario usuario = geraNovoUsuario("Joao");					
 			Leilao leilao = geraLeilao(usuario, "700");			
 			Lance lance = geraLance(usuario, leilao, "400");				
 			Lance lance2 = geraLance(usuario, leilao,"600");
@@ -235,11 +210,12 @@ class LanceDaoTest {
 		return leilao;
 	}
 	
-	private Usuario geraNovoUsuario() {
+	private Usuario geraNovoUsuario(String nome) {
 		Usuario usuario = new UsuarioBuilder()
-				.comNome("Fulano")
+				.comNome(nome)
 				.comEmail("fulano@gmail.com")
-				.comSenha("12345678").criar();	
+				.comSenha("12345678")
+				.criar();	
 		em.persist(usuario);
 		return usuario;
 	}

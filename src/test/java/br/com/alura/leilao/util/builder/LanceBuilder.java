@@ -29,7 +29,7 @@ public class LanceBuilder {
 	
 	public Lance criar() {
 		Lance lance = new Lance(usuario, valor); 
-		lance.setLeilao(leilao);
+		lance.setLeilao(leilao);		
 		return lance;
 	}	
 	

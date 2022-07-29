@@ -19,6 +19,8 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import br.com.alura.leilao.validacao.LanceValidador;
+
 @Entity
 public class Leilao {
 
@@ -139,46 +141,13 @@ public class Leilao {
 	}
 
 	private boolean ehUmLanceValido(Lance lance) {
-
+		LanceValidador validador = new LanceValidador();		
 		
-		
-		return valorEhMaior(lance, ultimoLanceDado())
-				&& isAberto()
-				&& oUltimoUsuarioNaoEhOMesmoDo(lance)
-				&& totalDeLancesDoUsuarioEhMenorIgual5(lance.getUsuario())
-				&& (lance.getValor().compareTo(valorInicial) < 1)
-				&& (lance.getValor().compareTo(new BigDecimal("0.1")) == 1) ;
-	}
-
-	private boolean valorEhMaior(Lance lance, Lance ultimoLanceDado) {
-		return lance.getValor().compareTo(ultimoLanceDado.getValor()) > 0;
-	}
-
-	private boolean totalDeLancesDoUsuarioEhMenorIgual5(Usuario usuario) {
-		int totalDeLances = qtdDeLancesDo(usuario);
-		return totalDeLances <= 5;
-	}
-
-	private boolean oUltimoUsuarioNaoEhOMesmoDo(Lance lance) {
-		Usuario ultimoUsuarioQueDeuLance = ultimoLanceDado().getUsuario();
-		return !ultimoUsuarioQueDeuLance.equals(lance.getUsuario());
-	}
-
-	private int qtdDeLancesDo(Usuario usuario) {
-		int total = 0;
-		for (Lance l : lances) {
-			if (l.getUsuario().equals(usuario))
-				total++;
-		}
-		return total;
+		return validador.validar(lance);		
 	}
 
 	private boolean estaSemLances() {
 		return this.lances.isEmpty();
-	}
-
-	private Lance ultimoLanceDado() {
-		return lances.get(lances.size() - 1);
 	}
 
 	public List<Lance> getLances() {

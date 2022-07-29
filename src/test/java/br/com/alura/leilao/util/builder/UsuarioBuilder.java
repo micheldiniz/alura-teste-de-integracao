@@ -25,7 +25,7 @@ public class UsuarioBuilder {
 	
 	public Usuario criar() {
 		return new Usuario(nome, email, senha);
-	}
+	}	
 	
 	
 }

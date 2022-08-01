@@ -2,23 +2,25 @@ package br.com.alura.leilao.validacao;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import br.com.alura.leilao.model.Lance;
 
 public class LanceValidador implements ValidarLance{
 	
-	private List<ValidarLance> validadores = new ArrayList<ValidarLance>();
+	private List<ValidarLance> validadores;
 	
 	private List<String> mensagensDeErro = new ArrayList<String>();
 		
 	public LanceValidador() {
-		validadores.add(new LanceEhMaiorQueOAnterior());
-		validadores.add(new LancePodeSerRealizadoPoisLeilaoEstaAberto());
-		validadores.add(new LanceFeitoPorUsuarioDiferente());
-		validadores.add(new LanceNaoEhMenorQueOValorInicialDoLeilao());
-		validadores.add(new LanceNaoPossuiDataMenorQueADeDoLeilao());
-		validadores.add(new LanceTotalDoUsuarioEhMenorQueCinco());
+		validadores = Arrays.asList(
+				new LanceEhMaiorQueOAnterior(),
+				new LancePodeSerRealizadoPoisLeilaoEstaAberto(),
+				new LanceFeitoPorUsuarioDiferente(),
+				new LanceNaoEhMenorQueOValorInicialDoLeilao(),
+				new LanceNaoPossuiDataMenorQueADeDoLeilao(),
+				new LanceTotalDoUsuarioEhMenorQueCinco());
 	}
 	
 	@Override

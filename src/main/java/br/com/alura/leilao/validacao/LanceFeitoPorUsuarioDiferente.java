@@ -19,8 +19,7 @@ public class LanceFeitoPorUsuarioDiferente implements ValidarLance {
 	public String showErrorMessage() {
 		return "Não é permitido proposta de lance subsequente de um mesmo usuário!";
 	}
-	
-	
+
 	private Usuario ultimoUsuarioAProporLance(Lance lance) {
 		Leilao leilao = lance.getLeilao();
 		Lance UltimoLance = leilao.getLances().get(leilao.getLances().size()-1);  

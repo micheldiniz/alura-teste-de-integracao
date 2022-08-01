@@ -1,6 +1,9 @@
 package br.com.alura.leilao.dao;
 
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -53,11 +56,17 @@ class LanceDaoTest {
 			Lance lance = geraLance(usuario, leilao, "51");
 			leilao.propoe(lance);
 			
-			Lance lance2 = geraLance(usuario2, leilao, "53");
+			Lance lance2 = geraLance(usuario2, leilao, "52");
 			
-			Assert.assertEquals(false, leilao.propoe(lance2));
+			Exception e = Assert.assertThrows(IllegalArgumentException.class, () -> {
+				leilao.propoe(lance2);
+			});
+			
+			String mensagemDeErroEsperada = "Leilão está fechado e não está recebendo novas propostas!";
+			
+			assertTrue(e.getMessage().contains(mensagemDeErroEsperada));
 		}
-		
+
 		@Test
 		void NaoDeveriaAceitarDoisLancesSeguidosDeUmMesmoUsuario() {
 			Usuario usuario = geraNovoUsuario("Joao");
@@ -69,7 +78,11 @@ class LanceDaoTest {
 			
 			Lance lance2 = geraLance(usuario, leilao, "502");			
 			
-			Assert.assertEquals(false, leilao.propoe(lance2));
+			Exception e = Assert.assertThrows(IllegalArgumentException.class, () -> {
+				leilao.propoe(lance2);
+			});
+			String mensagemDeErroEsperada = "Não é permitido proposta de lance subsequente de um mesmo usuário!";
+			assertTrue(e.getMessage().contains(mensagemDeErroEsperada));
 		}
 		
 		@Test
@@ -117,28 +130,36 @@ class LanceDaoTest {
 			
 			Lance lance13 = geraLance(usuario, leilao, "1006");
 			
-			Assert.assertEquals(false, leilao.propoe(lance13));
+			Exception e = Assert.assertThrows(IllegalArgumentException.class, () -> {
+				leilao.propoe(lance13);
+			});
+			
+			String mensagemDeErroEsperada = "Usuário já realizou o numero máximo (5) de lances no leilão!";
+			assertTrue(e.getMessage().contains(mensagemDeErroEsperada));
 		}
 		
 		@Test
 		void NaoDeveriaAceitarLanceComValorMenorQueOUltimo() {
 			Usuario usuario = geraNovoUsuario("Joao");					
 			Usuario usuario2 = geraNovoUsuario("Claudio");
-			System.out.println(usuario.equals(usuario2)+" ###################################################################################");
 			
 			Leilao leilao = geraLeilao(usuario, "500");		
 			
 			Lance lance = geraLance(usuario2, leilao, "400");
 			leilao.propoe(lance);
-			
+
 			Lance lance2 = geraLance(usuario, leilao, "600");
 			leilao.propoe(lance2);
-			
+
 			Lance lance3 = geraLance(usuario2, leilao, "590");
-			leilao.propoe(lance3);
+
+			Exception e = Assert.assertThrows(IllegalArgumentException.class, () -> {
+				leilao.propoe(lance3);
+			});				
 			
+			String mensagemDeErroEsperada = "Valor do Lance é menor que o anterior!";
 			
-			Assert.assertEquals(false, leilao.propoe(lance3));		
+			assertTrue(e.getMessage().contains(mensagemDeErroEsperada));
 		}
 		
 		@Test
@@ -152,8 +173,14 @@ class LanceDaoTest {
 			leilao.propoe(lance);
 			
 			Lance lance2 = geraLance(usuario2, leilao, "401");
+		
+			Exception e = Assert.assertThrows(IllegalArgumentException.class, () -> {
+				leilao.propoe(lance2);
+			});
 			
-			Assert.assertEquals(false, leilao.propoe(lance2));			
+			String mensagemDeErroEsperada = "Lance com valor menor que o valor inicial do leilão!";
+			assertTrue(e.getMessage().contains(mensagemDeErroEsperada));
+			
 		}
 		
 	}
@@ -163,17 +190,18 @@ class LanceDaoTest {
 	
 		@Test
 		void testDeveriaRetornarMaiorLanceDoLeilao() {
-			Usuario usuario = geraNovoUsuario("Joao");					
+			Usuario usuario = geraNovoUsuario("Joao");
+			Usuario usuario2 = geraNovoUsuario("Claudio");			
 			Leilao leilao = geraLeilao(usuario, "700");			
-			Lance lance = geraLance(usuario, leilao, "400");				
-			Lance lance2 = geraLance(usuario, leilao,"600");
+			Lance lance = geraLance(usuario, leilao, "800");				
+			Lance lance2 = geraLance(usuario2, leilao,"801");
 			
 			leilao.propoe(lance);
 			leilao.propoe(lance2);
 					
 			Lance maior = dao.buscarMaiorLanceDoLeilao(leilao);
 			
-			Assert.assertEquals(maior.getValor(), new BigDecimal("600"));
+			Assert.assertEquals(maior.getValor(), new BigDecimal("801"));
 			
 		}
 

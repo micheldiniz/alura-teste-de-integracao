@@ -18,8 +18,6 @@ public class LanceTotalDoUsuarioEhMenorQueCinco implements ValidarLance {
 				++total;
 			System.out.println(l.getUsuario().getNome());
 		}				
-		System.out.println(total);
-		System.out.println(lance.getLeilao().getLances().size()+"##################################################");
 		if (total <= 5) {
 			return Boolean.TRUE;
 		}
